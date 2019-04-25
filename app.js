@@ -27,17 +27,16 @@ const bodyParser = require('body-parser');
 
 const models = require('./db/models');
 
-require('./controllers/events')(app, models);
-
 // override with POST having ?_method=DELETE or ?_method=PUT
 app.use(methodOverride('_method'));
+
+require('./controllers/events')(app, models);
+require('./controllers/rsvps')(app, models);
+
 
 // The following line must appear AFTER const app = express() and before your routes!
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//const models = require('./db/models');
-
-//require('./controllers/events')(app, models);
 
 // Choose a port to listen on
 const port = process.env.PORT || 3000;

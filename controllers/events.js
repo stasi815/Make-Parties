@@ -4,14 +4,14 @@ module.exports = function (app, models) {
 app.get('/', (req, res) => {
     models.Event.findAll({ order: [['createdAt', 'DESC']] }).then(events => {
         res.render('events-index', { events: events });
-    });
+    })
 });
 //};
 
 // CREATE
 app.post('/events', (req, res) => {
   models.Event.create(req.body).then(event => {
-    res.redirect(`/events/${event.id}`);
+    res.redirect(`/events/${event.id}`)
   }).catch((err) => {
     console.log(err)
   });
