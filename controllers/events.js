@@ -1,3 +1,5 @@
+var moment = require("moment")
+
 module.exports = function (app, models) {
 
 // INDEX
@@ -50,16 +52,29 @@ app.get('/events/new', (req, res) => {
 
 // SHOW
 app.get('/events/:id', (req, res) => {
-  // Search for the event by its id that was passed in via req.params
-  models.Event.findByPk(req.params.id, { include: [{ model: models.Rsvp }] }).then((event) => {
-
-    // If the id is for a valid event, show it
-    res.render('events-show', { event: event })
-  }).catch((err) => {
-    // if the id was for an event not in our db, log an error
-    console.log(err.message);
-  })
+    // Search for the event by its id that was passed in via req.params
+    models.Event.findByPk(req.params.id, { include: [{ model: models.Rsvp }] }).then(event => {
+        let createdAt = event.createdAt;
+        createdAt = moment(createdAt).format('MMMM Do YYYY, h:mm:ss a');
+        event.createdAtFormatted = createdAt;
+   // If the id is for a valid event, show it
+      res.render('events-show', { event: event });
+    }).catch((err) => {
+  // if the id was for an event not in our db, log an error
+        console.log(err.message);
+    });
 });
+// app.get('/events/:id', (req, res) => {
+//   // Search for the event by its id that was passed in via req.params
+//   models.Event.findByPk(req.params.id, { include: [{ model: models.Rsvp }] }).then((event) => {
+//
+//     // If the id is for a valid event, show it
+//     res.render('events-show', { event: event })
+//   }).catch((err) => {
+//     // if the id was for an event not in our db, log an error
+//     console.log(err.message);
+//   })
+// });
 
 // EDIT
 app.get('/events/:id/edit', (req, res) => {
